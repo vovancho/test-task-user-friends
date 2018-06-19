@@ -11,6 +11,7 @@ namespace app\domain\repositories;
 
 use app\domain\models\User;
 use yii\db\Expression;
+use yii\db\Query;
 
 class UserRepository
 {
@@ -25,7 +26,7 @@ class UserRepository
 
     public function getFriendsRecommendation(User $user, int $limit): array
     {
-        return (new \yii\db\Query())
+        return (new Query())
             ->select([
                 'id',
                 'friendsOfFriends.user_id AS recommend_id',
@@ -36,7 +37,11 @@ class UserRepository
             ->leftJoin('{{%users_friends}} friendsOfFriends', '`friendsByUser`.`user_id` = `friendsOfFriends`.`friend_id`')
             ->andWhere(['id' => $user->primaryKey])
             ->andWhere(['not in', 'users.id', '[[friendsByUser]].[[user_id]]'])
-            ->andWhere(['not in', 'users.id', '[[friendsOfFriends]].[[user_id]]'])
+            ->andWhere(['not in', 'friendsOfFriends.user_id', (new Query())
+                ->select('friend_id')
+                ->from('{{%users_friends}}')
+                ->where(['user_id' => $user->primaryKey])
+            ])
             ->groupBy(['id', 'friendsOfFriends.user_id'])
             ->orderBy(['rate' => SORT_DESC])
             ->limit($limit)

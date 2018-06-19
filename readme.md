@@ -19,6 +19,7 @@ _Входные артефакты_ :
 ```bash
 git clone https://github.com/vovancho/test-task-user-friends.git
 cd test-task-user-friends
+composer install
 ```
 
 Изменить настройки подключения к базе данных с дампом в файле:
@@ -31,4 +32,10 @@ vi config/db.php
 
 ```bash
 php yii users/friends-recommendation {user_id}
+```
+
+Дополнительно можно задать лимит выводимых записей:
+
+```bash
+php yii users/friends-recommendation {user_id} {limit}
 ```
