@@ -25,20 +25,20 @@ class UserRepository
 
     public function getFriendsRecommendation(User $user): array
     {
-        return User::find()
+        return (new \yii\db\Query())
             ->select([
                 'id',
-                'friendsByUser2.user_id AS recommend_id',
-                new Expression('count(friendsByUser2.user_id) AS rate'),
+                'friendsOfFriends.user_id AS recommend_id',
+                new Expression('count(friendsOfFriends.user_id) AS rate'),
             ])
-            ->joinWith(['friendsByUser', 'friendsByUser2'])
+            ->from('{{%users}}')
+            ->leftJoin('{{%users_friends}} friendsByUser', '`users`.`id` = `friendsByUser`.`friend_id`')
+            ->leftJoin('{{%users_friends}} friendsOfFriends', '`friendsByUser`.`user_id` = `friendsOfFriends`.`friend_id`')
             ->andWhere(['id' => $user->primaryKey])
-            ->andWhere(['not', ['users.id' => '[[friendsByUser]].[[user_id]]']])
-            ->andWhere(['not', ['users.id' => '[[friendsByUser2]].[[user_id]]']])
-            ->groupBy(['friendsByUser2.user_id'])
+            ->andWhere(['not in', 'users.id', '[[friendsByUser]].[[user_id]]'])
+            ->andWhere(['not in', 'users.id', '[[friendsOfFriends]].[[user_id]]'])
+            ->groupBy(['id', 'friendsOfFriends.user_id'])
             ->orderBy(['rate' => SORT_DESC])
-            ->limit(1)
-            ->asArray()
             ->all();
     }
 }

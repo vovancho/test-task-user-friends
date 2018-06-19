@@ -50,13 +50,4 @@ class User extends ActiveRecord
         return $this->hasOne(UserFriends::class, ['friend_id' => 'id'])
             ->from(['friendsByUser' => UserFriends::tableName()]);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFriendsByUser2()
-    {
-        return $this->hasOne(UserFriends::class, ['friend_id' => 'id'])
-            ->from(['friendsByUser2' => UserFriends::tableName()]);
-    }
 }
