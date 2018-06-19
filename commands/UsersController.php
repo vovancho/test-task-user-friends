@@ -20,10 +20,15 @@ class UsersController extends Controller
 
     public function actionFriendsRecommendation($userID, $limit = 5)
     {
-        echo Table::widget([
-            'headers' => ['user_id', 'recommend_id', 'rate'],
-            'rows' => $this->service->getFriendsRecommendation($userID, $limit),
-        ]);
+        try {
+            echo Table::widget([
+                'headers' => ['user_id', 'recommend_id', 'rate'],
+                'rows' => $this->service->getFriendsRecommendation($userID, $limit),
+            ]);
+        } catch (\DomainException $e) {
+            $this->stderr('Ошибка: ' . $e->getMessage());
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
 
         return ExitCode::OK;
     }
