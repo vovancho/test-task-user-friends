@@ -18,7 +18,7 @@ class UsersController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    public function actionFriendsRecommendation(int $count = 1)
+    public function actionFriendsRecommendation($count = 1)
     {
         echo Table::widget([
             'headers' => ['user_id', 'recommend_id', 'rate'],
