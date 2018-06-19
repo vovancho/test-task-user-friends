@@ -23,7 +23,7 @@ class UserRepository
         return $user;
     }
 
-    public function getFriendsRecommendation(User $user): array
+    public function getFriendsRecommendation(User $user, int $limit): array
     {
         return (new \yii\db\Query())
             ->select([
@@ -39,6 +39,7 @@ class UserRepository
             ->andWhere(['not in', 'users.id', '[[friendsOfFriends]].[[user_id]]'])
             ->groupBy(['id', 'friendsOfFriends.user_id'])
             ->orderBy(['rate' => SORT_DESC])
+            ->limit($limit)
             ->all();
     }
 }

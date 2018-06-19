@@ -19,9 +19,18 @@ class UserService
         $this->users = $repository;
     }
 
-    public function getFriendsRecommendation($userID): array
+    public function getFriendsRecommendation($userID, $limit): array
     {
+        $this->validateLimit($limit);
         $user = $this->users->getUser($userID);
-        return $this->users->getFriendsRecommendation($user);
+
+        return $this->users->getFriendsRecommendation($user, $limit);
+    }
+
+    protected function validateLimit($limit)
+    {
+        if ($limit < 1) {
+            throw new \DomainException('Limit must be integer number and greater than 0.');
+        }
     }
 }

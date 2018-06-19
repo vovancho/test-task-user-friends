@@ -18,11 +18,11 @@ class UsersController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    public function actionFriendsRecommendation($userID)
+    public function actionFriendsRecommendation($userID, $limit = 5)
     {
         echo Table::widget([
             'headers' => ['user_id', 'recommend_id', 'rate'],
-            'rows' => $this->service->getFriendsRecommendation($userID),
+            'rows' => $this->service->getFriendsRecommendation($userID, $limit),
         ]);
 
         return ExitCode::OK;
