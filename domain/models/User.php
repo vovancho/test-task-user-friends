@@ -47,14 +47,16 @@ class User extends ActiveRecord
      */
     public function getFriendsByUser()
     {
-        return $this->hasOne(UserFriends::class, ['user_id' => 'user_id'])->from(['friendsByUser' => UserFriends::tableName()]);
+        return $this->hasOne(UserFriends::class, ['friend_id' => 'id'])
+            ->from(['friendsByUser' => UserFriends::tableName()]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsersByFriends()
+    public function getFriendsByUser2()
     {
-        return $this->hasOne(UserFriends::class, ['user_id' => 'friend_id'])->from(['userByFriends' => UserFriends::tableName()]);
+        return $this->hasOne(UserFriends::class, ['friend_id' => 'id'])
+            ->from(['friendsByUser2' => UserFriends::tableName()]);
     }
 }

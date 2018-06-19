@@ -19,12 +19,9 @@ class UserService
         $this->users = $repository;
     }
 
-    public function getFriendsRecommendation($count)
+    public function getFriendsRecommendation($userID): array
     {
-        if (is_int($count) && $count < 1) {
-            throw new \DomainException('Count must be greater than 0 and this integer number');
-        }
-
-        return $this->users->getFriendsRecommendation($count);
+        $user = $this->users->getUser($userID);
+        return $this->users->getFriendsRecommendation($user);
     }
 }

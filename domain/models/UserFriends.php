@@ -24,20 +24,4 @@ class UserFriends extends ActiveRecord
             [['user_id', 'friend_id'], 'integer'],
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['user_id' => 'user_id'])->from(['user' => User::tableName()]);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFriend()
-    {
-        return $this->hasOne(User::class, ['user_id' => 'friend_id'])->from(['friend' => User::tableName()]);
-    }
 }
